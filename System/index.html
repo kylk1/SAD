@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pisonet Access System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+
+    <div id="login-screen" class="screen">
+        <h1 class="auth-header">Enhanced Pisonet <br> Access System</h1>
+        <div class="auth-card">
+            <input type="text" id="login-user" placeholder="Username" class="f-input">
+            <input type="password" id="login-pass" placeholder="Password" class="f-input">
+            <a href="#" class="blue-link small">Forgot password?</a>
+            <button onclick="handleLogin()" class="btn-main">Login</button>
+            <a href="#" onclick="showScreen('register-screen')" class="blue-link">Register</a>
+        </div>
+    </div>
+
+    <div id="register-screen" class="screen hidden">
+        <h1 class="auth-header">Create Account</h1>
+        <div class="auth-card">
+            <label>Username</label><input type="text" id="reg-username" class="f-input">
+            <label>E-mail</label><input type="email" id="reg-email" class="f-input">
+            <label>Password</label><input type="password" id="reg-password" class="f-input">
+            <label>Confirm Password</label><input type="password" class="f-input">
+            <button onclick="handleRegister()" class="btn-main">Register</button>
+            <p class="small">Already have an account? <a href="#" onclick="showScreen('login-screen')" class="blue-link">Login</a></p>
+        </div>
+    </div>
+
+    <div id="main-app" class="screen hidden app-grid">
+        <aside class="sidebar">
+        	
+            <div class="nav-item active" onclick="tab('dash-tab', this)">
+                <span class="material-icons-outlined">home</span> Dashboard
+            </div>
+            <div class="nav-item" onclick="tab('profile-tab', this)">
+                <span class="material-icons-outlined">person</span> Profile
+            </div>
+            <div class="nav-item" onclick="tab('session-tab', this)">
+                <span class="material-icons-outlined">schedule</span> Active Session
+            </div>
+           		<div class="nav-item" onclick="tab('add-time-tab', this)">
+    	<span class="material-icons-outlined">add_circle_outline</span> Add Time
+		</div>
+		<div class="nav-item" onclick="tab('order-food-tab', this)">
+ 		   <span class="material-icons-outlined">restaurant</span> Order Food
+		</div>
+		<div class="nav-item" onclick="tab('history-tab', this)">
+    <span class="material-icons-outlined">history</span> History
+</div>
+            <div class="nav-item" onclick="tab('settings-tab', this)">
+                <span class="material-icons-outlined">settings</span> Settings
+            </div>
+            <div class="nav-item logout" onclick="handleLogout()">
+                <span class="material-icons-outlined">logout</span> Logout
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="dash-tab" class="tab-pane">
+                <h2 class="page-title">User Dashboard</h2>
+                <div class="banner">Welcome, <span class="user-name">User</span></div>
+                <div class="card-grid">
+                    <div class="stat-box"><span>Total Balance</span><strong id="bal-total">php 500.00</strong></div>
+                    <div class="stat-box"><span>Today's Balance</span><strong>php 200.00</strong></div>
+                    <div class="stat-box"><span>Remaining Time</span><strong class="timer-text">43:00</strong></div>
+                    <div class="stat-box"><span>Session</span><strong>2</strong></div>
+                </div>
+            </section>
+
+
+
+            <section id="session-tab" class="tab-pane hidden">
+                <h2 class="page-title">Session Running</h2>
+                <div class="center-content">
+                    <h1 class="timer-text big">43:00</h1>
+                    <button id="pause-btn" class="btn-main" onclick="togglePause()">Pause</button>
+                </div>
+            </section>
+            <section id="add-time-tab" class="tab-pane hidden">
+    <h2 class="page-title">Add Session Time</h2>
+    <div class="card-grid">
+        <div class="stat-box pointer" onclick="addTime(15, 5)">
+            <span>15 Minutes</span>
+            <strong>₱ 5.00</strong>
+        </div>
+        <div class="stat-box pointer" onclick="addTime(35, 10)">
+            <span>35 Minutes</span>
+            <strong>₱ 10.00</strong>
+        </div>
+        <div class="stat-box pointer" onclick="addTime(180, 50)">
+            <span>3 Hours</span>
+            <strong>₱ 50.00</strong>
+        </div>
+    </div>
+</section>
+<section id="order-food-tab" class="tab-pane hidden">
+    <h2 class="page-title">Canteen / Order Food</h2>
+    <div class="card-grid">
+        <div class="stat-box">
+            <span>Pancit Canton</span>
+            <strong>₱ 20.00</strong>
+            <div class="qty-wrapper">
+                <button class="qty-btn" onclick="changeQty('qty-pancit', -1)">-</button>
+                <input type="number" id="qty-pancit" value="1" min="1" readonly>
+                <button class="qty-btn" onclick="changeQty('qty-pancit', 1)">+</button>
+            </div>
+            <button class="btn-main mini" onclick="orderFood('Pancit Canton', 20, 'qty-pancit')">Order</button>
+        </div>
+
+        <div class="stat-box">
+            <span>Mountain Dew</span>
+            <strong>₱ 15.00</strong>
+            <div class="qty-wrapper">
+                <button class="qty-btn" onclick="changeQty('qty-dew', -1)">-</button>
+                <input type="number" id="qty-dew" value="1" min="1" readonly>
+                <button class="qty-btn" onclick="changeQty('qty-dew', 1)">+</button>
+            </div>
+            <button class="btn-main mini" onclick="orderFood('Mountain Dew', 15, 'qty-dew')">Order</button>
+        </div>
+    </div>
+</section>
+   
+<section id="profile-tab" class="tab-pane hidden">
+    <h2 class="page-title">Profile</h2>
+    <div class="avatar-circle"><span class="material-icons-outlined">person</span></div>
+    
+    <div class="profile-info" id="profile-view">
+        <label>Username</label><div class="gray-box user-name">User</div>
+        <label>Email</label><div class="gray-box" id="user-email">user@gmail.com</div>
+        <button class="btn-main" onclick="toggleEditProfile(true)">Edit Profile</button>
+    </div>
+
+    <div class="profile-info hidden" id="profile-edit">
+        <label>New Username</label>
+        <input type="text" id="edit-name" class="f-input" style="width: 100%; margin-bottom:10px;">
+        <label>New Email</label>
+        <input type="email" id="edit-email" class="f-input" style="width: 100%; margin-bottom:10px;">
+        <button class="btn-main" onclick="saveProfile()">Save Changes</button>
+        <button class="btn-main mini" onclick="toggleEditProfile(false)" style="background:#666;">Cancel</button>
+    </div>
+</section>
+
+<section id="settings-tab" class="tab-pane hidden">
+    <h2 class="page-title">Settings</h2>
+    <h3>Appearance</h3>
+    <div class="row">
+        <span>Dark mode</span>
+        <label class="switch">
+            <input type="checkbox" id="dark-toggle" onchange="toggleDark()">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <h3>Account</h3>
+    <div class="row pointer" onclick="changePassword()">
+        <span>Change Password</span>
+        <span class="material-icons-outlined">chevron_right</span>
+    </div>
+</section>
+
+<section id="history-tab" class="tab-pane hidden">
+    <h2 class="page-title">Transaction History</h2>
+    <div id="history-list">
+        <p style="color:#888;">No transactions yet.</p>
+    </div>
+</section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
